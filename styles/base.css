@@ -1,0 +1,31 @@
+body {
+    background-color: black;
+    color: gray;
+    font-size: 9pt;
+    display: inline-block;
+    position: relative;
+    left: 40px;
+    font-family: 'Courier New', Courier, monospace;
+    /*white-space: pre-wrap;*/
+
+}
+h1 {
+    color: aqua;
+    font-size: 12pt;
+    position: relative;
+    left: -40px;
+    font-family: 'Lucida Sans', 'Lucida Sans Regular', 'Lucida Grande', 'Lucida Sans Unicode', Geneva, Verdana, sans-serif
+}
+h2 {
+    color: greenyellow;
+    font-size: 11pt;
+    position: relative;
+    left: -30px;
+    font-family: 'Lucida Sans', 'Lucida Sans Regular', 'Lucida Grande', 'Lucida Sans Unicode', Geneva, Verdana, sans-serif
+}
+h3 {
+    color: white;
+    font-size: 10pt;
+    position: relative;
+    left: -20px;
+}
