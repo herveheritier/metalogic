@@ -77,81 +77,213 @@ ENSEMBLE.FILLE = ENSEMBLE.newSet("FILLE",[ charlotte, malvina, patricia, roberte
 
 // série de tests
 
+Test.devToolsMute()
+Test.setRepeat(1000)
+
 console.clear()
 console.group('*** Tests series ***')
 console.group('sets used for those tests')
-ENSEMBLE.setsMap.forEach((v,k,m) => Object.prototype.isPrototypeOf(v[0]) ? console.log(k+" : "+JSON.stringify(v,null,4)) : console.log(k+" : "+[...v]))
+ENSEMBLE.setsMap.forEach((v,k,m) => Object.prototype.isPrototypeOf(v[0]) ? console.log(k+" : "+JSON.stringify(v)) : console.log(k+" : "+[...v]))
 console.groupEnd()
 console.group('union')
-test("Sets.union(['a','b','c'],['d','e','f'])", ["a", "b", "c", "d", "e", "f"])
-test("Sets.union(['a','b','c'],ENSEMBLE.CHIFFRE)", ["a", "b", "c", "0", "1", "2", "3", "4", "5", "6", "7", "8", "9"])
-test("Sets.union(ENSEMBLE.CHIFFRE,['d','e','f'])", ["0", "1", "2", "3", "4", "5", "6", "7", "8", "9", "d", "e", "f"])
-test("Sets.union(['1','2','c'],ENSEMBLE.CHIFFRE)", ["1", "2", "c", "0", "3", "4", "5", "6", "7", "8", "9"])
-test("Sets.union(ENSEMBLE.CHIFFRE,['d','5','f'])", ["0", "1", "2", "3", "4", "5", "6", "7", "8", "9", "d", "f"])
-test("Sets.union(ENSEMBLE.CHIFFRE,ENSEMBLE.SIGNE)", ["0", "1", "2", "3", "4", "5", "6", "7", "8", "9", "+", "-"])
-test("Sets.union(ENSEMBLE.SIGNE,ENSEMBLE.CHIFFRE)", ["+", "-", "0", "1", "2", "3", "4", "5", "6", "7", "8", "9"])
+Test.run(
+    ()=>Sets.union(['a','b','c'],['d','e','f']),
+    ["a", "b", "c", "d", "e", "f"]
+    )
+Test.run(
+    ()=>Sets.union(['a','b','c'],ENSEMBLE.CHIFFRE),
+    ["a", "b", "c", "0", "1", "2", "3", "4", "5", "6", "7", "8", "9"]
+    )
+Test.run(
+    ()=>Sets.union(ENSEMBLE.CHIFFRE,['d','e','f']),
+    ["0", "1", "2", "3", "4", "5", "6", "7", "8", "9", "d", "e", "f"]
+    )
+Test.run(
+    ()=>Sets.union(['1','2','c'],ENSEMBLE.CHIFFRE),
+    ["1", "2", "c", "0", "3", "4", "5", "6", "7", "8", "9"]
+    )
+Test.run(
+    ()=>Sets.union(ENSEMBLE.CHIFFRE,['d','5','f']),
+    ["0", "1", "2", "3", "4", "5", "6", "7", "8", "9", "d", "f"]
+    )
+Test.run(
+    ()=>Sets.union(ENSEMBLE.CHIFFRE,ENSEMBLE.SIGNE),
+    ["0", "1", "2", "3", "4", "5", "6", "7", "8", "9", "+", "-"]
+    )
+Test.run(
+    ()=>Sets.union(ENSEMBLE.SIGNE,ENSEMBLE.CHIFFRE),
+    ["+", "-", "0", "1", "2", "3", "4", "5", "6", "7", "8", "9"]
+    )
 console.groupEnd()
 console.group('isInclude')
-test("Sets.isInclude(ENSEMBLE.LETTRE,['a','d'])", true)
-test("Sets.isInclude(ENSEMBLE.MAJUSCULE,['A','d'])", false)
+Test.run(
+    ()=>Sets.isInclude(ENSEMBLE.LETTRE,['a','d']),
+    true
+    )
+Test.run(
+    ()=>Sets.isInclude(ENSEMBLE.MAJUSCULE,['A','d']),
+    false
+    )
 console.groupEnd()
 console.group('generate')
-test("Sets.generate(ENSEMBLE.LETTRE,18)",null,(e)=>e.length==18)
+Test.run(
+    ()=>Sets.generate(ENSEMBLE.LETTRE,18),
+    null,
+    (e)=>e.length==18)
 console.groupEnd()
 console.group('identifySuperset')
-test("ENSEMBLE.identifySuperset(['1','a'])",["CARACTERE", "BASE64"])
-test("ENSEMBLE.identifySuperset(ENSEMBLE.SIGNE)",["SIGNE", "ARITHMETIQUE", "CARACTERE", "FORMULE"])
-test("ENSEMBLE.identifySuperset(Sets.fromString('star'))",["MINUSCULE", "LETTRE", "CARACTERE", "BASE64"])
+Test.run(
+    ()=>ENSEMBLE.identifySuperset(['1','a']),
+    ["CARACTERE", "BASE64"]
+    )
+Test.run(
+    ()=>ENSEMBLE.identifySuperset(ENSEMBLE.SIGNE),
+    ["SIGNE", "ARITHMETIQUE", "CARACTERE", "FORMULE"]
+    )
+Test.run(
+    ()=>ENSEMBLE.identifySuperset(Sets.fromString('star')),
+    ["MINUSCULE", "LETTRE", "CARACTERE", "BASE64"]
+    )
 console.groupEnd()
 console.group('intersection')
-test("Sets.intersection(['a','b','c','d'],['r','a','p','i','d','e'])", ["a", "d"])
-test("Sets.intersection(ENSEMBLE.FORMULE,ENSEMBLE.BASE64)", ["0", "1", "2", "3", "4", "5", "6", "7", "8", "9", "+", "/"])
-test("Sets.intersection(Sets.fromString('Blabla Car'),ENSEMBLE.MAJUSCULE)", ["B", "C"])
+Test.run(
+    ()=>Sets.intersection(['a','b','c','d'],['r','a','p','i','d','e']),
+    ["a", "d"]
+    )
+Test.run(
+    ()=>Sets.intersection(ENSEMBLE.FORMULE,ENSEMBLE.BASE64),
+    ["0", "1", "2", "3", "4", "5", "6", "7", "8", "9", "+", "/"]
+    )
+Test.run(
+    ()=>Sets.intersection(Sets.fromString('Blabla Car'),ENSEMBLE.MAJUSCULE),
+    ["B", "C"]
+    )
 console.groupEnd()
 console.group('outerLeft')
-test("Sets.outerLeft(['a','b','c','d'],['r','a','p','i','d','e'])", ["b", "c"])
-test("Sets.outerLeft(['r','a','p','i','d','e'],['a','b','c','d'])", ["r", "p", "i", "e"])
-test("Sets.outerLeft(ENSEMBLE.FORMULE,ENSEMBLE.BASE64)", ["-", "*", "(", ")"])
-test("Sets.outerLeft(Sets.fromString('Blabla Car'),ENSEMBLE.MAJUSCULE)", ["l", "a", "b", " ", "r"])
+Test.run(
+    ()=>Sets.outerLeft(['a','b','c','d'],['r','a','p','i','d','e']),
+    ["b", "c"]
+    )
+Test.run(
+    ()=>Sets.outerLeft(['r','a','p','i','d','e'],['a','b','c','d']),["r", "p", "i", "e"]
+    )
+Test.run(
+    ()=>Sets.outerLeft(ENSEMBLE.FORMULE,ENSEMBLE.BASE64),
+    ["-", "*", "(", ")"]
+    )
+Test.run(
+    ()=>Sets.outerLeft(Sets.fromString('Blabla Car'),ENSEMBLE.MAJUSCULE),
+    ["l", "a", "b", " ", "r"]
+    )
 console.groupEnd()
 console.group('compare')
-test("Sets.compare(['a','b','c','d'],['r','a','p','i','d','e'])",null,(e)=>e.etat=="1~2"&&e.distincts.length==8&&e.intersection.length==2&&e.seul1.length==2&&e.seul2.length==4)
-test("Sets.compare(ENSEMBLE.BASE64,ENSEMBLE.ARITHMETIQUE)",null,(e)=>e.etat=="1~2"&&e.distincts.length==68&&e.intersection.length==2&&e.seul1.length==62&&e.seul2.length==4)
+Test.run(
+    ()=>Sets.compare(['a','b','c','d'],['r','a','p','i','d','e']),
+    null,
+    (e)=>e.etat=="1~2"&&e.distincts.length==8&&e.intersection.length==2&&e.seul1.length==2&&e.seul2.length==4
+    )
+Test.run(
+    ()=>Sets.compare(ENSEMBLE.BASE64,ENSEMBLE.ARITHMETIQUE),
+    null,
+    (e)=>e.etat=="1~2"&&e.distincts.length==68&&e.intersection.length==2&&e.seul1.length==62&&e.seul2.length==4
+    )
 console.groupEnd()
 console.group('minimalCommonSet')
-test("ENSEMBLE.minimalCommonSet(ENSEMBLE.identifySuperset(['1','a']))",null,(e)=>ENSEMBLE.getName(e)=="BASE64")
-test("ENSEMBLE.minimalCommonSet(ENSEMBLE.identifySuperset(ENSEMBLE.SIGNE))",null,(e)=>ENSEMBLE.getName(e)=="SIGNE")
-test("ENSEMBLE.minimalCommonSet(ENSEMBLE.identifySuperset(Sets.fromString('star')))",null,(e)=>ENSEMBLE.getName(e)=="MINUSCULE")
-test("ENSEMBLE.minimalCommonSet(ENSEMBLE.identifySuperset(Sets.outerLeft(ENSEMBLE.FORMULE,ENSEMBLE.CHIFFRE)))",null,(e)=>ENSEMBLE.getName(e)=="ARITHMETIQUE")
-test("ENSEMBLE.minimalCommonSet(ENSEMBLE.LETTRE,ENSEMBLE.CHIFFRE)",[])
-test("ENSEMBLE.minimalCommonSet(ENSEMBLE.BASE64,ENSEMBLE.LETTRE)",null,(e)=>ENSEMBLE.getName(e)=="LETTRE")
-test("ENSEMBLE.minimalCommonSet(ENSEMBLE.BASE64,ENSEMBLE.ARITHMETIQUE)",["+","/"])
+Test.run(
+    ()=>ENSEMBLE.minimalCommonSet(ENSEMBLE.identifySuperset(['1','a'])),
+    null,
+    (e)=>ENSEMBLE.getName(e)=="BASE64"
+    )
+Test.run(
+    ()=>ENSEMBLE.minimalCommonSet(ENSEMBLE.identifySuperset(ENSEMBLE.SIGNE)),
+    null,
+    (e)=>ENSEMBLE.getName(e)=="SIGNE"
+    )
+Test.run(
+    ()=>ENSEMBLE.minimalCommonSet(ENSEMBLE.identifySuperset(Sets.fromString('star'))),
+    null,
+    (e)=>ENSEMBLE.getName(e)=="MINUSCULE"
+    )
+Test.run(
+    ()=>ENSEMBLE.minimalCommonSet(ENSEMBLE.identifySuperset(Sets.outerLeft(ENSEMBLE.FORMULE,ENSEMBLE.CHIFFRE))),
+    null,
+    (e)=>ENSEMBLE.getName(e)=="ARITHMETIQUE"
+    )
+Test.run(
+    ()=>ENSEMBLE.minimalCommonSet(ENSEMBLE.LETTRE,ENSEMBLE.CHIFFRE),
+    []
+    )
+Test.run(
+    ()=>ENSEMBLE.minimalCommonSet(ENSEMBLE.BASE64,ENSEMBLE.LETTRE),
+    null,
+    (e)=>ENSEMBLE.getName(e)=="LETTRE"
+    )
+Test.run(
+    ()=>ENSEMBLE.minimalCommonSet(ENSEMBLE.BASE64,ENSEMBLE.ARITHMETIQUE),
+    ["+","/"]
+    )
 console.groupEnd()
 console.group('isSet')
-test("ENSEMBLE.isSet(ENSEMBLE.PONCTUATION)",true)
-test("ENSEMBLE.isSet(['1','2','3','4','5','6','7','8','9','0'])",true)
-test("ENSEMBLE.isSet(['a','b','c'])",false)
+Test.run(
+    ()=>ENSEMBLE.isSet(ENSEMBLE.PONCTUATION),
+    true
+    )
+Test.run(
+    ()=>ENSEMBLE.isSet(['1','2','3','4','5','6','7','8','9','0']),
+    true
+    )
+Test.run(
+    ()=>ENSEMBLE.isSet(['a','b','c']),
+    false
+    )
 console.groupEnd()
 console.group('getName')
-test("ENSEMBLE.getName(ENSEMBLE.LETTRE)","LETTRE")
-test("ENSEMBLE.getName(ENSEMBLE.FAUX)",undefined)
-test("ENSEMBLE.getName(['0','1','2','3','4','5','6','7','8','9'])","CHIFFRE")
-test("ENSEMBLE.getName('toto')",undefined)
+Test.run(
+    ()=>ENSEMBLE.getName(ENSEMBLE.LETTRE),
+    "LETTRE"
+    )
+Test.run(
+    ()=>ENSEMBLE.getName(ENSEMBLE.FAUX),
+    undefined
+    )
+Test.run(
+    ()=>ENSEMBLE.getName(['0','1','2','3','4','5','6','7','8','9']),
+    "CHIFFRE"
+    )
+Test.run(
+    ()=>ENSEMBLE.getName('toto'),
+    undefined
+    )
 console.groupEnd()
 console.group('getEnsemble')
-test("ENSEMBLE.getEnsemble(ENSEMBLE.LETTRE)",ENSEMBLE.LETTRE)
-test("ENSEMBLE.getEnsemble(ENSEMBLE.FAUX)",undefined)
-test("ENSEMBLE.getEnsemble('CHIFFRE')",ENSEMBLE.CHIFFRE)
-test("ENSEMBLE.getEnsemble('toto')",undefined)
+Test.run(
+    ()=>ENSEMBLE.getEnsemble(ENSEMBLE.LETTRE),
+    ENSEMBLE.LETTRE
+    )
+Test.run(
+    ()=>ENSEMBLE.getEnsemble(ENSEMBLE.FAUX),
+    undefined
+    )
+Test.run(
+    ()=>ENSEMBLE.getEnsemble('CHIFFRE'),
+    ENSEMBLE.CHIFFRE
+    )
+Test.run(
+    ()=>ENSEMBLE.getEnsemble('toto'),
+    undefined
+    )
 console.groupEnd()
 console.group("working with set of object's instances")
-test("Sets.compare(Sets.union(ENSEMBLE.GARCON,ENSEMBLE.FILLE),ENSEMBLE.PERSONNE).seul2",[herve])
+Test.run(
+    ()=>Sets.compare(Sets.union(ENSEMBLE.GARCON,ENSEMBLE.FILLE),ENSEMBLE.PERSONNE).seul2,
+    [herve]
+    )
 console.groupEnd()
 console.groupEnd()
 
 // résultat comptage
 
-testResults()
+Test.results()
 
     </script>
 </html>
