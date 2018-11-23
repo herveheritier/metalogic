@@ -1,12 +1,19 @@
 <html>
     <head>
         <script src="scripts/sets.js"></script>
-        <script src="scripts/test.js"></script>
+        <script id="testSrc" src="scripts/test.js"></script>
         <link rel="stylesheet"  href="styles/base.css"/>
     </head>
     <body>
-        <h1>Test de la classe Sets</h1>
-        Pour visualiser la class, consulter le source de la page<br/>
+        <h1>Sets class test</h1>
+        Sets class offering basics set theory facilities and little more capacities.<br/>
+        This page use the Test object facilities.<br/>
+        <h2>Sets class source code</h2>
+        <button onclick="var cl=document.querySelector('#SetsSource').classList; cl.toggle('hide'); cl.toggle('show')">show/hide source code</button><br/>
+        <iframe id="SetsSource" src="scripts/sets.js" class="hide"></iframe>
+        <h2>Test class source code</h2>
+        <button onclick="var cl=document.querySelector('#TestSource').classList; cl.toggle('hide'); cl.toggle('show')">show/hide source code</button><br/>
+        <iframe id="TestSource" src="scripts/test.js" class="hide"></iframe>
     </body>
     <script>
 

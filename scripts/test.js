@@ -1,8 +1,101 @@
-/*********************************************
- * 
- *    Test object offering test facilities
- * 
- *********************************************/
+/**
+
+(lang,EN:[
+
+```Test``` object offering test facilities
+------------
+
+The natives console.log, console.group and console.groupEnd functions are refactored.
+ Natively, they wrote into the devTools console.
+  The refactoring routes messages into the DOM, so messages are displayed at the end of the html's body.
+
+By default, they are also displayed into the devTools console, but it's possible to mute it ; this capability is reversible.
+
+```Test.devToolsMute()``` : mute the console.log function
+```Test.devToolsLoud()``` : activate the console.log function
+
+To run a test, just call the ```Test.run``` function with 2 ou 3 arguments :
+- 1st argument is a function to test. Declare it as a callback function.
+- 2nd argument is the expected value by running the function to test
+- 3rd argument is optionnaly to declare only when the 2nd argument is null ;
+  it's an other callback function wich is used to control result of the  function to test.
+  It's take one argument, the tested function result.
+  And it must return a boolean value : true if the test is passed, else false if failed.
+
+Tested function, tested function result and check result are dispayed.
+
+```Test.run(testedFunction,expectedResult,controlFunction)``` : run a test
+
+The ```Test.run``` function logic is as is :
+- increment the calling counter
+- display the tested function code
+- run the tested function
+- if attempt result value is null
+-- run the control function  and if result is ok then display the tested function result
+- if attempt result value is not null
+-- compare tested function result with attempt result  and if it's equalf then display the tested function result
+- at all, display the check state (passed or failed)
+- if test is passed rerun the tested function as much as requested  to compute the elapsed time the display it.
+  The rerun depend on  the ```Test.repeat``` value equal to 1000 by default
+
+```Test.setRepeat(n)``` : force the rerun ```Test.repeat``` value
+
+After running all tests, call the ```Test.results``` function to display statistics for all tests runned since the previous ```Test.results``` calling.
+The calling reset the statistics.
+
+```Test.results()``` : display statistics
+
+])
+(lang,FR:[
+
+```Test``` object propose des capacité de test
+------------
+
+Utilisation
+
+Les fonctions natives console.log, console.group et console.groupEnd sont recodée.
+Nativement, elles écrivent dans la console devTools.
+Le nouveau code envoi les messages dans le DOM, de sorte que les messages sont affichés à la fin du body du html.
+
+Par défaut, ils sont aussi affichés dans la console devTools, mais il est possible d'interrompre cette sortie ; cette capacité est réversible.
+
+```Test.devToolsMute()``` : interromp la sortie de la fonction console.log
+```Test.devToolsLoud()``` : réactive la sortie de la fonction console.log
+
+Pour exécuter un test, appelez la fonction ```Test.run``` avec 2 ou 3 arguments :
+- Le 1er argument est une fonction à tester. Déclarez-le comme fonction de callback.
+- Le 2ème argument est la valeur attentude en exécutant la fonction à tester
+- Le 3ème argument (optionnel) est à déclarer seulement quand le 2ème argument est nul ;
+  c'est une autre fonction de callback utilisée pour contrôler le résultat de la fonction à tester.
+  Il nécessite un argument, le résultat de la fonction testée.
+  Elle doit retourner une valeur booléenne : true si le test est réussi, false en cas d'échec.
+
+La fonction testée, le résultat de la fonction testée et le résultat du contrôle sont affichés.
+
+```Test.run(testedFunction,attemptResult,controlFunction)``` : exécuter un test
+
+La logique de la fonction ```Test.run``` est :
+- incrémenter le compteur d'appel
+- afficher le code de la fonction testée
+- exécuter la fonction testée
+- si la valeur du résultat attendu est null
+-- exécuter la fonction de contrôle et si le résultat est correct, affichez le résultat de la fonction testée.
+- si la valeur du résultat attendu n'est pas nul
+-- comparer le résultat de la fonction testée avec le résultat attendu et s'il est égal, affichez le résultat de la fonction testée.
+- afficher l'état du controle (réussi ou échoué)
+- si le test est réussi, réexécutez la fonction testée autant de fois que demandé pour calculer le temps écoulé puis l'afficher.
+  La répétition dépend de  la valeur ```Test.repeat``` égale à 1000 par défaut
+
+```Test.setRepeat(n)``` : force la répétition du test ```Test.repeat```
+
+Après avoir exécuté tous les tests, appelez la fonction ```Test.results``` pour afficher les statistiques
+pour tous les tests exécutés depuis le précédent appel de ```Test.results```.
+L'appel réinitialise les statistiques.
+
+```Test.results()``` : afficher les statistiques
+
+])
+*/
 
 const Test = {
 
@@ -14,7 +107,14 @@ const Test = {
     testComponent : [],
     testTimer: null,
 
-    // reroutage des fonctions log, group et groupEnd de l'objet console
+    /***** 
+    (lang,EN:[
+        reroute console functions log, group and groupEnd
+    ])
+    (lang,FR:[
+        reroutage des fonctions log, group et groupEnd de l'objet console
+    ])
+    */
 
     done : (function(){
         var devToolsLog = console.log;
@@ -41,29 +141,66 @@ const Test = {
         }
     })(),
 
-    // desactivation / activation de la log de la console du devTools
-    // si inactive, le reroutage est exclusif
-    // si active, les messages console sont à la fois rerouté et émis dans la console
+    /*
+    (lang,EN:[
+        deactivate / activate log display into devTolls console
+        if inactive, route is exclusive
+        if active, console message are route and send to the devTools console
+    ])
+    (lang,FR:[
+        desactivation / activation de la log de la console du devTools
+        si inactive, le reroutage est exclusif
+        si active, les messages console sont à la fois rerouté et émis dans la console
+    ])*/
     devToolsMute : () => Test.mute = true,
     devToolsLoud : () => Test.mute = false,
+
+    /*
+    (lang,EN:[
+        set test repetition for performance mesurement
+    ])
+    (lang,FR:[
+        valorise le nombre de repetition des test pour la mesure de performance
+    ])
+    */
     setRepeat : (repeat) => Test.repeat = repeat,
 
-    /****************************************************************
-    * fonction de pilotage des tests
-    * ev : string du code a évaluer
-    * attempt : valeur résultat attendue 
-    * validFunc (optionnelle) : fonction de validation
-    * la fonction de validation est réalisée ssi attempt est à null
-    *
-    * si le test est ok, l'évaluation est rejouée 1000 fois 
-    * pour mesurer les performances
-    ******************************************************************/ 
+    /*
+    (lang,EN:[
+        extract function code whose format is (arg[,arg]) => *
+        return undefined if no code is extracted
+    ])
+    (lang,FR:[
+        extraction du code d'une fonction de la forme (arg[,arg]) => *
+        retourne undefined si aucun code n'a pu être extrait
+    ])
+    */    
+
+    extractCode : (f) => /^\([^\)]*\) *=>(.*)$/gms.exec(f.toString())[1],
+
+    /*
+    (lang,EN:[
+        Test Driving
+        ev : callback including code to test
+        attemp : expected result value
+        validFunc (optional) : callback validation function
+        The validFunc is called only if attemp is null.
+        If test passed, evaluation is repeated ```Test.repeat``` times for performance mesearument
+    ])
+    (lang,FR:[
+        Fonction de pilotage des tests
+        ev : callback du code a évaluer
+        attempt : valeur résultat attendue 
+        validFunc (optionnelle) : fonction de validation
+        La fonction de validation est réalisée ssi attempt est à null
+        Si le test est ok, l'évaluation est rejouée ```Test.repeat``` fois pour mesurer les performances
+    ])
+    */    
     run : (ev,attempt,validFunc=null) => {
         Test.count++
-        console.group(ev)
-        //var res = eval(ev)
+        var code = Test.extractCode(ev)
+        console.group(code ? code : ev)
         var res = ev()
-        //console.log(res)
         var ok = false
         if(validFunc!=null) {
             var vf = validFunc(res)
@@ -102,14 +239,22 @@ const Test = {
 
     },
 
-    // compte-rendu de test
-
+    /*
+    (lang,EN:[
+        test report
+    ])
+    (lang,FR:[
+        compte-rendu de test
+    ])
+    */
     results : () => {
         console.group('****** Tests Report *******')
         console.log("tests executed : "+Test.count)
         console.log("tests passed   : "+(Test.count-Test.failed))
         console.log("tests failed   : "+Test.failed)
         console.groupEnd()
+        Test.count = 0
+        Test.failed = 0
     }
 
 }

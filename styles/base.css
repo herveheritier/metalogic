@@ -1,6 +1,6 @@
 body {
-    background-color: black;
-    color: gray;
+    background-color: gray;
+    color: white;
     font-size: 9pt;
     display: inline-block;
     position: relative;
@@ -10,14 +10,14 @@ body {
 
 }
 h1 {
-    color: aqua;
+    color: white;
     font-size: 12pt;
     position: relative;
     left: -40px;
     font-family: 'Lucida Sans', 'Lucida Sans Regular', 'Lucida Grande', 'Lucida Sans Unicode', Geneva, Verdana, sans-serif
 }
 h2 {
-    color: greenyellow;
+    color: white;
     font-size: 11pt;
     position: relative;
     left: -30px;
@@ -28,4 +28,15 @@ h3 {
     font-size: 10pt;
     position: relative;
     left: -20px;
+}
+iframe {
+    border: 1px solid black;
+    width: calc(100vw - 200px);
+    height: 80vh;
+}
+.hide {
+    display: none;
+}
+.show {
+    display: inline;
 }
