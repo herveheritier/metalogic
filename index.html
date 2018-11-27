@@ -1,7 +1,7 @@
 <html>
     <head>
         <script src="scripts/sets.js"></script>
-        <script id="testSrc" src="scripts/test.js"></script>
+        <script id="testSrc" src="resources/test.js"></script>
         <link rel="stylesheet"  href="styles/base.css"/>
     </head>
     <body>
@@ -10,12 +10,11 @@
         This page use the Test object facilities.<br/>
         <h2>Sets class source code</h2>
         <button onclick="var cl=document.querySelector('#SetsSource').classList; cl.toggle('hide'); cl.toggle('show')">show/hide source code</button><br/>
-        <iframe id="SetsSource" src="scripts/sets.js" class="hide"></iframe>
-        <h2>Test class source code</h2>
-        <button onclick="var cl=document.querySelector('#TestSource').classList; cl.toggle('hide'); cl.toggle('show')">show/hide source code</button><br/>
-        <iframe id="TestSource" src="scripts/test.js" class="hide"></iframe>
+        <iframe id="SetsSource" name="i1" src="resources/iframeMixCodeViewer.html?i1" class="hide"></iframe>
     </body>
     <script>
+
+setUpFrame = (e) => window.frames['i1'].loadCode("scripts/sets.js")
 
 //********************************** pour tests *******************************//
 //********************************** pour tests *******************************//
